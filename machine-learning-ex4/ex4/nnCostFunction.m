@@ -48,11 +48,25 @@ theta2_reg = Theta2(:, 2:end);
 reg = (lambda / (2*m)) * (sum(sum(theta1_reg .^ 2)) + sum(sum(theta2_reg .^ 2)));
 J = J + reg;
 
+         
+% You need to return the following variables correctly 
 Theta1_grad = zeros(size(Theta1));
 Theta2_grad = zeros(size(Theta2));
 
-         
-% You need to return the following variables correctly 
+% Backpropagation
+delta3 = h - y_matrix;
+delta2 = Theta2' * delta3 .* [ones(1, m); sigmoidGradient(z2)];
+delta2 = delta2(2:end, :);
+DELTA2 = delta3 * a2';
+DELTA1 = delta2 * a1;
+Theta1_grad = (1/m) * DELTA1;
+Theta2_grad = (1/m) * DELTA2;
+
+% Regularized backpropagation
+[l1, n1] = size(Theta1_grad);
+Theta1_grad = Theta1_grad +[zeros(l1, 1) (lambda/m) * theta1_reg];
+[l2, n2] = size(Theta2_grad);
+Theta2_grad = Theta2_grad +[zeros(l2, 1) (lambda/m) * theta2_reg];
 
 
 
