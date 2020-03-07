@@ -36,8 +36,18 @@ a2 = [ones(1, m); a2];
 z3 = Theta2 * a2;
 h = sigmoid(z3);
 
+% Compute cost without regularization
 J = (1/m) * sum(((-1 * y_matrix) .* log(h) - (1 - y_matrix) .* log(1 - h)));
 J = sum(J);
+
+% Transform Theta
+theta1_reg = Theta1(:, 2:end);
+theta2_reg = Theta2(:, 2:end);
+
+% Compute cost with regularization
+reg = (lambda / (2*m)) * (sum(sum(theta1_reg .^ 2)) + sum(sum(theta2_reg .^ 2)));
+J = J + reg;
+
 Theta1_grad = zeros(size(Theta1));
 Theta2_grad = zeros(size(Theta2));
 
